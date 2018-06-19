@@ -105,7 +105,13 @@ module.exports = function(environment) {
           // Ensure development env hits aren't sent to GA
           sendHitTask: environment !== 'development',
           // Specify Google Analytics plugins
-          require: ['ecommerce']
+          require: ['ecommerce'],
+          // Set arbitrary fields on the default tracker using `ga('set', key, value)`
+          // https://developers.google.com/analytics/devguides/collection/analyticsjs/command-queue-reference#set
+          setFields: {
+            hostname: 'example.com',
+            anonymizeIp: true,
+          }
         }
       },
       {

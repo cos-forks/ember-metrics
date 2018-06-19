@@ -14,7 +14,7 @@ export default class GoogleAnalytics extends BaseAdapter {
 
   init() {
     const config = assign({}, this.config);
-    const { id, sendHitTask, trace, require, debug, trackerName } = config;
+    const { id, sendHitTask, trace, require, debug, trackerName, setFields } = config;
     set(this, 'gaSendKey', trackerName ? trackerName + '.send' : 'send');
 
     assert(`[ember-metrics] You must pass a valid \`id\` to the ${this.toString()} adapter`, id);
@@ -25,6 +25,7 @@ export default class GoogleAnalytics extends BaseAdapter {
     delete config.sendHitTask;
     delete config.trace;
     delete config.trackerName;
+    delete config.setFields;
 
     const hasOptions = isPresent(Object.keys(config));
 
@@ -49,6 +50,12 @@ export default class GoogleAnalytics extends BaseAdapter {
 
     if (sendHitTask === false) {
       window.ga('set', 'sendHitTask', null);
+    }
+
+    if (setFields) {
+      Object.keys(setFields).forEach((fieldName) => {
+        window.ga('set', fieldName, setFields[fieldName]);
+      });
     }
   }
 
